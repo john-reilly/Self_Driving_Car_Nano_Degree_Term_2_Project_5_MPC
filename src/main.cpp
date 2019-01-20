@@ -94,8 +94,8 @@ int main() {
           
           for(int i = 1 ; i < num_points ; i++)
           {
-            next_x_vals.pushback(poly_inc*i);
-            next_y_vals.pushback(polyeval(coeffs,poly_inc*i));
+            next_x_vals.push_back(poly_inc*i);
+            next_y_vals.push_back(polyeval(coeffs,poly_inc*i));
           }
           
           vector<double> mpc_x_vals ;
@@ -121,7 +121,7 @@ int main() {
           //   [-deg2rad(25), deg2rad(25] instead of [-1, 1].
           msgJson["steering_angle"] = vars[0]/(deg2rad(25)*Lf );//steer_value;
           msgJson["throttle"] = vars[1] ; //throttle_value;
-          
+          //end of Q+A material
       
 
           // Display the MPC predicted trajectory 
