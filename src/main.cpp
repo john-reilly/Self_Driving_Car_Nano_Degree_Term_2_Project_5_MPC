@@ -13,13 +13,63 @@
 
 // for convenience
 using nlohmann::json;
-using std::string;
+using std::string; // becuase of error
 using std::vector;
 
 // For converting back and forth between radians and degrees.
 constexpr double pi() { return M_PI; }
 double deg2rad(double x) { return x * pi() / 180; }
 double rad2deg(double x) { return x * 180 / pi(); }
+
+
+//from Q+A video // this hasData was in helpers.h
+//string hasData(string s){
+//	auto found_null = s.find("null");
+//  auto b1 = s.find_first_of("[");
+//  auto b2 = s.rfind("}]");
+  
+//  if(found_null != string::npos){
+//  	return "";
+//  }else if (b1 != string::npos && b2 != string::npos){
+//  return s.substr(b1,b2 -b1 +2);
+//  }
+//  return "";
+//}
+
+//evaluate a polynomial
+//double polyeval(Eigen::VectorXd coeffs, double x){
+//double result = 0.0 ;
+//  for (int i=0; i < coeffs.size(); i++){
+//    result +=coeffs[i] * pow(x,i);
+//  }
+//  return result;
+//}
+
+//fit a ploynomial
+// from quiz Lesson 18, Video 9
+// Adapted from
+// https://github.com/JuliaMath/Polynomials.jl/blob/master/src/Polynomials.jl#L676-L716
+//Eigen::VectorXd polyfit(Eigen::VectorXd xvals, Eigen::VectorXd yvals,int order) {
+//  assert(xvals.size() == yvals.size());
+//  assert(order >= 1 && order <= xvals.size() - 1);
+//  Eigen::MatrixXd A(xvals.size(), order + 1);
+
+//  for (int i = 0; i < xvals.size(); i++) {
+//    A(i, 0) = 1.0;
+//  }
+
+//  for (int j = 0; j < xvals.size(); j++) {
+//    for (int i = 0; i < order; i++) {
+//      A(j, i + 1) = A(j, i) * xvals(j);
+//    }
+//  }
+
+//  auto Q = A.householderQr();
+//  auto result = Q.solve(yvals);
+//  return result;
+//}
+
+
 
 int main() {
   uWS::Hub h;
@@ -40,6 +90,7 @@ int main() {
         auto j = json::parse(s);
         string event = j[0].get<string>();
         if (event == "telemetry") {
+          std::cout << "Line 93 Telementry" << std::endl ;
           // j[1] is the data JSON object
           vector<double> ptsx = j[1]["ptsx"];
           vector<double> ptsy = j[1]["ptsy"];
@@ -47,7 +98,7 @@ int main() {
           double py = j[1]["y"];
           double psi = j[1]["psi"];
           double v = j[1]["speed"];
-
+			std::cout << "Line 101 after inits" << std::endl ;
           /**
            * TODO: Calculate steering angle and throttle using MPC.
            * Both are in between [-1, 1].
@@ -64,7 +115,7 @@ int main() {
             ptsy[i] = (shift_x * sin(0-psi) + shift_y * cos(0-psi));
             
           }
-          
+          std::cout << "Line 118 after first loop" << std::endl ;
           double* ptrx = &ptsx[0] ;
           Eigen::Map<Eigen::VectorXd> ptsx_transform(ptrx,6) ;
           
@@ -82,8 +133,9 @@ int main() {
           
           Eigen::VectorXd state(6);
           state << 0,0,0,v,cte,epsi;
-          
+          std::cout << "Line 136 before solve" << std::endl ;
           auto vars = mpc.Solve(state,coeffs);
+           std::cout << "Line 137 after solve" << std::endl ;
           
           
           vector<double> next_x_vals ;
@@ -97,7 +149,7 @@ int main() {
             next_x_vals.push_back(poly_inc*i);
             next_y_vals.push_back(polyeval(coeffs,poly_inc*i));
           }
-          
+          std::cout << "Line 151" << std::endl ;
           vector<double> mpc_x_vals ;
           vector<double> mpc_y_vals ;
           
@@ -112,7 +164,7 @@ int main() {
               mpc_y_vals.push_back(vars[i]) ;
             }
           }
-          
+               std::cout << "Line 166" << std::endl ;
           double Lf = 2.67 ;
           
           json msgJson;
@@ -125,8 +177,8 @@ int main() {
       
 
           // Display the MPC predicted trajectory 
-          //vector<double> mpc_x_vals;
-          //vector<double> mpc_y_vals;
+          vector<double> mpc_x_vals;
+          vector<double> mpc_y_vals;//were commented out
 
           /**
            * TODO: add (x,y) points to list here, points are in reference to 
@@ -138,8 +190,8 @@ int main() {
           msgJson["mpc_y"] = mpc_y_vals;
 
           // Display the waypoints/reference line
-          //vector<double> next_x_vals;
-          //vector<double> next_y_vals;
+          vector<double> next_x_vals;
+          vector<double> next_y_vals;//also left out?? not in Q+A
 
           /**
            * TODO: add (x,y) points to list here, points are in reference to 
