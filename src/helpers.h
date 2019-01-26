@@ -25,9 +25,9 @@ string hasData(string s) {
 //
 // Helper functions to fit and evaluate polynomials.
 //
-
-// Evaluate a polynomial.
-double polyeval(const VectorXd &coeffs, double x) {
+// there were &'s here I took out beciase they were not in the quiz and now trying to find odd vector size issue memoery refs may be problem
+// Evaluate a polynomial. &coeffs
+double polyeval(const VectorXd coeffs, double x) {
   double result = 0.0;
   for (int i = 0; i < coeffs.size(); ++i) {
     result += coeffs[i] * pow(x, i);
@@ -38,7 +38,8 @@ double polyeval(const VectorXd &coeffs, double x) {
 // Fit a polynomial.
 // Adapted from:
 // https://github.com/JuliaMath/Polynomials.jl/blob/master/src/Polynomials.jl#L676-L716
-VectorXd polyfit(const VectorXd &xvals, const VectorXd &yvals, int order) {
+// there were &'s here I took out beciase they were not in the quiz and now trying to find odd vector size issue memoery refs may be problem &xvals, &yvals
+VectorXd polyfit(const VectorXd xvals, const VectorXd yvals, int order) {
   assert(xvals.size() == yvals.size());
   assert(order >= 1 && order <= xvals.size() - 1);
 
@@ -59,5 +60,7 @@ VectorXd polyfit(const VectorXd &xvals, const VectorXd &yvals, int order) {
 
   return result;
 }
+
+
 
 #endif  // HELPERS_H

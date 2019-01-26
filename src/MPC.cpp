@@ -254,6 +254,16 @@ std::cout << "line 241 in MPC SOLVE" << std::endl ;
   CppAD::ipopt::solve_result<Dvector> solution;
 std::cout << "line 244 in MPC SOLVE" << std::endl ;
   // solve the problem
+  //cout for all paramenteres here to try and find one causeing index problem
+  std::cout << "options size:" << options.size() << std::endl;
+  std::cout << "vars size :" << vars.size() << std::endl;
+  std::cout << "vars_lowerbound size:" << vars_lowerbound.size() << std::endl;
+  std::cout << "vars upperbound size :" << vars_upperbound.size() << std::endl;
+  std::cout << "constraints_lowerbound size :" << constraints_lowerbound.size() << std::endl;
+  std::cout << "constraints_upperbound size :" << constraints_upperbound.size() << std::endl;
+  //std::cout << "fgeval size :" << fg_eval.size() << std::endl;//no size() for this made error.....
+  //std::cout << "solution size :" << solution.size() << std::endl;//no size() for this
+  
   CppAD::ipopt::solve<Dvector, FG_eval>(
       options, vars, vars_lowerbound, vars_upperbound, constraints_lowerbound,
       constraints_upperbound, fg_eval, solution);
