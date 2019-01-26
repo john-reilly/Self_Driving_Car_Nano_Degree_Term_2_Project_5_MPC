@@ -136,7 +136,9 @@ int main() {
           double throttle_value = j[1]["throttle"] ;
           
           Eigen::VectorXd state(6);
-          state << 0,0,0,v,cte,epsi;
+          //state << 0,0,0,v,cte,epsi;
+          //maybe zeros and messing it up??
+          state << 1,1,1,v,cte,epsi;
           std::cout << "Line 136 before solve" << std::endl ;
           auto vars = mpc.Solve(state,coeffs);
            std::cout << "Line 137 after solve" << std::endl ;
