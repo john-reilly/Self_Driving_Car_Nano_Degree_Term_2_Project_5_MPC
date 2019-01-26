@@ -200,8 +200,8 @@ std::cout << "line 168 in MPC SOLVE" << std::endl ;
   //acclereration.deceleration upper and lower limit
   for(int i = a_start; i< n_vars; i++)
   {
-    vars_lowerbound[i] = -0.436332*Lf;
-    vars_upperbound[i] = 0.436332 * Lf;
+    vars_lowerbound[i] = -1;
+    vars_upperbound[i] = 1;
   }
 
   std::cout << "line 196 in MPC SOLVE" << std::endl ;
