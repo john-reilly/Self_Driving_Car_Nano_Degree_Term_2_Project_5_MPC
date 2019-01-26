@@ -177,8 +177,9 @@ int main() {
       
 
           // Display the MPC predicted trajectory 
-          //vector<double> mpc_x_vals;//gave redeclaration error
-          //vector<double> mpc_y_vals;
+
+          vector<double> mpc_x_vals;
+          vector<double> mpc_y_vals;//were commented out
 
           /**
            * TODO: add (x,y) points to list here, points are in reference to 
@@ -190,8 +191,10 @@ int main() {
           msgJson["mpc_y"] = mpc_y_vals;
 
           // Display the waypoints/reference line
-          //vector<double> next_x_vals;//gave redeclaration error 
-          //vector<double> next_y_vals;
+
+          vector<double> next_x_vals;
+          vector<double> next_y_vals;//also left out?? not in Q+A
+
 
           /**
            * TODO: add (x,y) points to list here, points are in reference to 

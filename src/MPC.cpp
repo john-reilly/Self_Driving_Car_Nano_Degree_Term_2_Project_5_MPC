@@ -115,15 +115,13 @@ class FG_eval {
       
          
        //changing 2 for 1 to try to fix index ewrror next 5 lines
-      //changed back
-      fg[2 + x_start + i] = x1 - (x0 + v0 * CppAD::cos(psi0) * dt);
-      fg[2 + y_start + i] = y1 - (y0 + v0 * CppAD::sin(psi0) * dt);
-      fg[2 + psi_start + i] = psi1 - (psi0 - v0 * delta0/Lf * dt);
-      fg[2 + v_start + i] = v1 - (v0 + a0 *dt);
-      fg[2 + cte_start + i ] = epsi1 - ((psi0 - psides0) - v0 * delta0 / Lf * dt);
-      
-      //am I missing this 
-      fg[2 + epsi_start + i] = epsi1 - ((psi0 - psides0) - v0 / Lf * delta0 * dt);
+
+      fg[1 + x_start + i] = x1 - (x0 + v0 * CppAD::cos(psi0) * dt);
+      fg[1 + y_start + i] = y1 - (y0 + v0 * CppAD::sin(psi0) * dt);
+      fg[1 + psi_start + i] = psi1 - (psi0 - v0 * delta0/Lf * dt);
+      fg[1 + v_start + i] = v1 - (v0 + a0 *dt);
+      fg[1 + cte_start + i ] = epsi1 - ((psi0 - psides0) - v0 * delta0 / Lf * dt);
+
       
       
   
@@ -186,8 +184,7 @@ std::cout << "line 168 in MPC SOLVE" << std::endl ;
     vars_lowerbound[i] = -1.0e19;
     vars_upperbound[i] = 1.0e19;
   }
-  
-  
+
   std::cout << "line 181 in MPC SOLVE" << std::endl ;
 //also from Q+A
   //delta -25 to 25 degrees values in radians
@@ -196,8 +193,7 @@ std::cout << "line 168 in MPC SOLVE" << std::endl ;
     vars_lowerbound[i] = -0.436332 * Lf;
     vars_upperbound[i] =  0.436332 * Lf;
   }
-  
-  
+
   std::cout << "line 189 in MPC SOLVE" << std::endl ;
   //acclereration.deceleration upper and lower limit
   for(int i = a_start; i< n_vars; i++)
@@ -205,8 +201,7 @@ std::cout << "line 168 in MPC SOLVE" << std::endl ;
     vars_lowerbound[i] = -0.436332*Lf;
     vars_upperbound[i] = 0.436332 * Lf;
   }
-  
-  
+
   std::cout << "line 196 in MPC SOLVE" << std::endl ;
   // Lower and upper limits for the constraints
   // Should be 0 besides initial state.
