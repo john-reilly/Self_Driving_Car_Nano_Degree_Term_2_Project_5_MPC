@@ -70,14 +70,14 @@ class FG_eval {
     
     for(int i = 0; i < N -1; i++)
     {
-      fg[0] += 5 * CppAD::pow(vars[delta_start + i],2);
-      fg[0] += 5 * CppAD::pow(vars[a_start + i],2);
+      fg[0] += 50 * CppAD::pow(vars[delta_start + i],2);
+      fg[0] += 50 * CppAD::pow(vars[a_start + i],2);
     }
     
     for(int i = 0; i < N -2; i++)
     {
-      fg[0] += 200*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i] , 2);
-      fg[0] += 10*CppAD::pow(vars[a_start + i + 1] - vars[a_start + i],2);
+      fg[0] += 250000*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i] , 2);//200
+      fg[0] += 5000*CppAD::pow(vars[a_start + i + 1] - vars[a_start + i],2);//10
       
     }
     
@@ -109,7 +109,9 @@ class FG_eval {
       
       AD<double> delta0 = vars[delta_start + i];
       AD<double> a0 = vars[a_start + i];
-      AD<double> f0 = coeffs[0] + coeffs[i] * x0 + coeffs[2] * x0 * x0 + coeffs[3] * x0 * x0 * x0 ;     
+      AD<double> f0 = coeffs[0] + coeffs[1] * x0 + coeffs[2] * x0 * x0 + coeffs[3] * x0 * x0 * x0 ;   
+      // changing i to one as from advice from knowledge
+      
       AD<double> psides0 = CppAD::atan(3*coeffs[3] * x0 * x0 + 2 * coeffs[2] * x0 + coeffs[1]);
      //hmmm not sure about above 2 lines
       
@@ -140,7 +142,8 @@ class FG_eval {
 MPC::MPC() {}
 MPC::~MPC() {}
 //this line is different in Q+A and might be casuing the Solve index problem also changed header file
-//std::vector<double> MPC::Solve(const VectorXd &state, const VectorXd &coeffs) 
+//changing back  vars seems emptry once solve working
+//std::vector<double> MPC::Solve(const VectorXd &state, const VectorXd &coeffs) {
 std::vector<double> MPC::Solve(Eigen::VectorXd state,  Eigen::VectorXd coeffs){
   std::cout << "line 137 in MPC SOLVE" << std::endl ;
   bool ok = true;
@@ -287,7 +290,13 @@ std::cout << "line 252 in MPC SOLVE" << std::endl ;
   
   result.push_back(solution.x[delta_start]);
   result.push_back(solution.x[a_start]);
-  
+  // i want to check solution here
+  // hmmm solution is comming back all zeros
+   for(int i = 0; i < N-1; i ++)
+  {
+   std::cout << "Solution:" << i << " " << solution.x[ i] << std::endl ;
+   
+  }
   for(int i = 0; i < N-1; i ++)
   {
     result.push_back(solution.x[x_start + i + 1]);

@@ -98,14 +98,20 @@ int main() {
           double py = j[1]["y"];
           double psi = j[1]["psi"];
           double v = j[1]["speed"];
-			std::cout << "Line 101 after inits" << std::endl ;
+          //wondering if the file is being read OK
+		  std::cout << "Line 101 after inits" << std::endl ;
+          //std::cout << "ptsx :" << ptsx << std::endl;
+          //std::cout << "ptsy :" << ptsy << std::endl;
+          std::cout << "px :" << px << std::endl;
+          std::cout << "py :" << py << std::endl;
+          std::cout << "v:" << v << std::endl;
           /**
            * TODO: Calculate steering angle and throttle using MPC.
            * Both are in between [-1, 1].
            */
-          
+ 
           //from Q+A video
-          for( int i = 0; i <= ptsx.size(); i++)// index error might be the <= here trying "<" ...didn't work reverting
+          for( int i = 0; i < ptsx.size(); i++)// index error might be the <= here trying "<" ...didn't work reverting// trying again as per advice from Knowledge reply
           {
             //shift car ref angle to 90 degree
             double shift_x = ptsx[i] - px ;
@@ -136,12 +142,19 @@ int main() {
           double throttle_value = j[1]["throttle"] ;
           
           Eigen::VectorXd state(6);
-          //state << 0,0,0,v,cte,epsi;
+          state << 0,0,0,v,cte,epsi;
           //maybe zeros and messing it up??
-          state << 1,1,1,v,cte,epsi;
+          //state << 1,1,1,v,cte,epsi; //didn't change thing
           std::cout << "Line 136 before solve" << std::endl ;
+          std::cout << "State:" << state << std::endl ;
+          std::cout << "Coeffs:" << coeffs << std::endl ;
+          
           auto vars = mpc.Solve(state,coeffs);
            std::cout << "Line 137 after solve" << std::endl ;
+           std::cout << "VARS size" << vars.size()<< std::endl ;
+          std::cout << "VARS [1]" << vars[1] <<std::endl ;
+          std::cout << "VARS [2]" << vars[2] <<std::endl ;
+          std::cout << "VARS [3]" << vars[3] <<std::endl ;
           
           
           vector<double> next_x_vals ;
@@ -253,3 +266,5 @@ int main() {
   
   h.run();
 }
+
+

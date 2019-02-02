@@ -14,6 +14,7 @@ class MPC {
   // Return the first actuations.
  //no & or const in video and maybe causing index error
   //std::vector<double> Solve(const Eigen::VectorXd &state,  const Eigen::VectorXd &coeffs);
+  //vars not changing?? 000 output changing above line back again
   std::vector<double> Solve(Eigen::VectorXd state,  Eigen::VectorXd coeffs);
 };
 
