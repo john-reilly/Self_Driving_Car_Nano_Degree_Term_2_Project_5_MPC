@@ -1,3 +1,9 @@
+
+
+
+
+
+
 #include "MPC.h"
 #include <cppad/cppad.hpp>
 #include <cppad/ipopt/solve.hpp>
@@ -13,6 +19,10 @@ using Eigen::VectorXd;
  * TODO: Set the timestep length and duration
  */
 //from Q+A video
+
+
+
+
 size_t N = 10;
 double dt = 0.1;
 
@@ -57,6 +67,8 @@ class FG_eval {
      * NOTE: You'll probably go back and forth between this function and
      *   the Solver function below.
      */
+
+
     //from Q+A video
     fg[0] = 0;
     //reference State Cost
@@ -64,7 +76,7 @@ class FG_eval {
     {//2000 below is high weight
       fg[0] += 1000*CppAD::pow(vars[cte_start + i] - ref_cte,2);//was 2000
       fg[0] += 1000*CppAD::pow(vars[epsi_start + i] - ref_epsi,2);//was 2000
-      fg[0] += CppAD::pow(vars[v_start + 1] - ref_v,2);
+      fg[0] += CppAD::pow(vars[v_start + i] - ref_v,2); //had 1 instead of i
       
     }
     
@@ -122,7 +134,8 @@ class FG_eval {
       fg[2 + y_start + i] = y1 - (y0 + v0 * CppAD::sin(psi0) * dt);
       fg[2 + psi_start + i] = psi1 - (psi0 - v0 * delta0/Lf * dt);
       fg[2 + v_start + i] = v1 - (v0 + a0 *dt);
-      fg[2 + cte_start + i ] = epsi1 - ((psi0 - psides0) - v0 * delta0 / Lf * dt);
+      //fg[2 + cte_start + i ] = epsi1 - ((psi0 - psides0) - v0 * delta0 / Lf * dt);//wrong!!
+      fg[2 + cte_start + i ] = cte1 - ((f0 - y0) +(v0 * CppAD::sin(epsi0) * dt));
       //am I missing this 
       fg[2 + epsi_start + i] = epsi1 - ((psi0 - psides0) - v0 / Lf * delta0 * dt);
 
@@ -164,10 +177,16 @@ std::vector<double> MPC::Solve(Eigen::VectorXd state,  Eigen::VectorXd coeffs){
    *   element vector and there are 10 timesteps. The number of variables is:
    *   4 * 10 + 2 * 9
    *///Q+A video
-  size_t n_vars = N * 6 + (N -1) *2; //from Q+A//0;
+ 
+
+
+size_t n_vars = N * 6 + (N -1) *2; //from Q+A//0;
   /**
    * TODO: Set the number of constraints
    */
+
+
+
   size_t n_constraints = N * 6;//from Q+A//0;
 std::cout << "line 161 in MPC SOLVE" << std::endl ;
   // Initial value of the independent variables.
@@ -182,6 +201,10 @@ std::cout << "line 168 in MPC SOLVE" << std::endl ;
   /**
    * TODO: Set lower and upper limits for variables.
    */
+
+
+
+
   std::cout << "line 161 in MPC SOLVE" << std::endl ;
   //from Q+A
   for(int i = 0; i<delta_start;i++)
@@ -286,6 +309,10 @@ std::cout << "line 252 in MPC SOLVE" << std::endl ;
    *   creates a 2 element double vector.
    */
   //from Q+A video
+
+
+
+
   std::vector<double> result;
   
   result.push_back(solution.x[delta_start]);
