@@ -23,8 +23,8 @@ using Eigen::VectorXd;
 
 
 
-size_t N = 10;
-double dt = 0.1;
+size_t N = 10;//10;
+double dt = 0.05; //0.1
 
 // This value assumes the model presented in the classroom is used.
 //
@@ -71,25 +71,38 @@ class FG_eval {
 
     //from Q+A video
     fg[0] = 0;
-    //reference State Cost
+   ////////////////
+    // This is the cost variables for below listed here for convience
+    //reference state costs
+    // I am using Q+ levels then doubleing and then halving them on first set of tests
+    double cte_ref_state_cost = 1000 ; //1000//4000 // 1000 //2000 in Q+A
+    double epsi_ref_state_cost = 1000 ;//1000 //4000 //2000 in Q+A
+    double v_ref_state_cots = 1 ; //1 in Q+A
+    //Acuators Cost
+    double delta_cost = 2500 ;//50 in Q+A
+    double a_cost = 150 ; //50 in Q+A
+    //Acuators Cost for time ahead t + 1
+    double delta_plus_cost = 10000;//1//250000 // 200 in Q+A
+    double a_plus_cost = 150; //1000;//1//5000 // 10 in Q+A
+      
     for(int i = 0; i < N ; i++)
     {//2000 below is high weight
-      fg[0] += 1000*CppAD::pow(vars[cte_start + i] - ref_cte,2);//was 2000
-      fg[0] += 1000*CppAD::pow(vars[epsi_start + i] - ref_epsi,2);//was 2000
-      fg[0] += CppAD::pow(vars[v_start + i] - ref_v,2); //had 1 instead of i
+      fg[0] += cte_ref_state_cost*CppAD::pow(vars[cte_start + i] - ref_cte,2);//was 2000
+      fg[0] += epsi_ref_state_cost*CppAD::pow(vars[epsi_start + i] - ref_epsi,2);//was 2000
+      fg[0] += v_ref_state_cots * CppAD::pow(vars[v_start + i] - ref_v,2); //had 1 instead of i
       
     }
     
     for(int i = 0; i < N -1; i++)
     {
-      fg[0] += 50 * CppAD::pow(vars[delta_start + i],2);
-      fg[0] += 50 * CppAD::pow(vars[a_start + i],2);
+      fg[0] += delta_cost * CppAD::pow(vars[delta_start + i],2);
+      fg[0] += a_cost * CppAD::pow(vars[a_start + i],2);
     }
     
     for(int i = 0; i < N -2; i++)
     {
-      fg[0] += 250000*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i] , 2);//200
-      fg[0] += 5000*CppAD::pow(vars[a_start + i + 1] - vars[a_start + i],2);//10
+      fg[0] += delta_plus_cost * CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i] , 2);//200
+      fg[0] += a_plus_cost * CppAD::pow(vars[a_start + i + 1] - vars[a_start + i],2);//10
       
     }
     
